@@ -68,7 +68,7 @@ export const App: React.FC = () => {
     <Box flexDirection="column" height="100%">
       <Box borderStyle="round" borderColor="green" paddingX={1}>
         <Text color="green" bold>
-          🌍 Welcome to Translator Agent v0.2.0
+          🌍 Welcome to Translator Agent v0.3.0
         </Text>
       </Box>
       
