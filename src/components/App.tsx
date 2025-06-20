@@ -3,19 +3,22 @@ import {Box, Text, useApp} from 'ink';
 import {MessageHistory} from './MessageHistory.js';
 import {InputBox} from './InputBox.js';
 import {StatusLine} from './StatusLine.js';
+import {generateChatResponse, ChatMessage} from '../utils/ai-client.js';
 
 export interface Message {
   id: string;
   text: string;
   timestamp: Date;
+  role: 'user' | 'assistant';
 }
 
 export const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<string>('');
   const {exit} = useApp();
 
-  const handleSubmit = (text: string) => {
+  const handleSubmit = async (text: string) => {
     if (text.trim()) {
       // Check for exit commands
       if (text.trim().toLowerCase() === 'exit' || text.trim().toLowerCase() === 'quit') {
@@ -23,14 +26,41 @@ export const App: React.FC = () => {
         return;
       }
       
-      const newMessage: Message = {
+      const userMessage: Message = {
         id: Date.now().toString(),
         text: text.trim(),
         timestamp: new Date(),
+        role: 'user',
       };
-      setMessages(prev => [...prev, newMessage]);
-      setStatus('Message sent successfully');
-      setTimeout(() => setStatus(''), 3000);
+      setMessages(prev => [...prev, userMessage]);
+      setStatus('Sending message to AI...');
+      setIsLoading(true);
+      
+      try {
+        // Convert messages to ChatMessage format
+        const chatMessages: ChatMessage[] = [...messages, userMessage].map(msg => ({
+          role: msg.role,
+          content: msg.text,
+        }));
+        
+        const response = await generateChatResponse(chatMessages);
+        
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: response,
+          timestamp: new Date(),
+          role: 'assistant',
+        };
+        
+        setMessages(prev => [...prev, assistantMessage]);
+        setStatus('Response received');
+        setTimeout(() => setStatus(''), 3000);
+      } catch (error) {
+        setStatus(`Error: ${error instanceof Error ? error.message : 'Failed to get response'}`);
+        setTimeout(() => setStatus(''), 5000);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -46,7 +76,7 @@ export const App: React.FC = () => {
       
       <InputBox onSubmit={handleSubmit} />
       
-      <StatusLine status={status} />
+      <StatusLine status={status} isLoading={isLoading} />
     </Box>
   );
 };
