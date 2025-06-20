@@ -24,9 +24,16 @@ export interface ChatMessage {
 const fileReaderTool = new FileReaderTool();
 const urlFetcherTool = new UrlFetcherTool();
 
+export interface ToolCallbacks {
+  onToolCall?: (toolName: string, args: any) => void;
+  onToolResult?: (toolName: string, result: any) => void;
+  onStatusChange?: (status: string) => void;
+}
+
 export async function generateChatResponse(
   messages: ChatMessage[],
-  modelName?: string
+  modelName?: string,
+  callbacks?: ToolCallbacks
 ): Promise<string> {
   try {
     const result = await generateText({
@@ -48,6 +55,9 @@ When the user provides a file path or URL, use the appropriate tool to fetch the
             filePath: z.string().describe('The local file path to read')
           }),
           execute: async ({ filePath }) => {
+            callbacks?.onToolCall?.('file_reader', { filePath });
+            callbacks?.onStatusChange?.(`Reading file: ${filePath}`);
+            
             const abortController = new AbortController();
             const context = {
               abortController,
@@ -56,6 +66,7 @@ When the user provides a file path or URL, use the appropriate tool to fetch the
             
             for await (const result of fileReaderTool.call({ filePath }, context)) {
               if (result.type === 'file_read') {
+                callbacks?.onToolResult?.('file_reader', result.data);
                 return result.data;
               } else if (result.type === 'error') {
                 throw new Error(result.data.message);
@@ -69,6 +80,9 @@ When the user provides a file path or URL, use the appropriate tool to fetch the
             url: z.string().url().describe('The HTTP(S) URL to fetch content from')
           }),
           execute: async ({ url }) => {
+            callbacks?.onToolCall?.('url_fetcher', { url });
+            callbacks?.onStatusChange?.(`Fetching URL: ${url}`);
+            
             const abortController = new AbortController();
             const context = {
               abortController,
@@ -77,6 +91,7 @@ When the user provides a file path or URL, use the appropriate tool to fetch the
             
             for await (const result of urlFetcherTool.call({ url }, context)) {
               if (result.type === 'url_fetched') {
+                callbacks?.onToolResult?.('url_fetcher', result.data);
                 return result.data;
               } else if (result.type === 'error') {
                 throw new Error(result.data.message);

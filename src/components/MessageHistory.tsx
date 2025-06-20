@@ -21,8 +21,15 @@ export const MessageHistory: React.FC<MessageHistoryProps> = ({messages}) => {
       ) : (
         messages.map((message) => (
           <Box key={message.id} marginBottom={1}>
-            <Text color={message.role === 'user' ? 'cyan' : 'yellow'}>
-              [{message.timestamp.toLocaleTimeString()}] {message.role === 'user' ? 'You' : 'AI'}:
+            <Text color={
+              message.role === 'user' ? 'cyan' : 
+              message.role === 'tool' ? 'magenta' : 'yellow'
+            }>
+              [{message.timestamp.toLocaleTimeString()}] {
+                message.role === 'user' ? 'You' : 
+                message.role === 'tool' ? `🔧 Tool (${message.toolName || 'unknown'})` : 
+                'AI'
+              }:
             </Text>
             <Text> {message.text}</Text>
           </Box>
