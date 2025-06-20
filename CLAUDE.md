@@ -70,6 +70,7 @@ src/
 - Focus on creating a functional CLI with proper error handling
 - Ensure the terminal UI is responsive and user-friendly
 - Implement proper TypeScript types throughout the codebase
+- Use `npm i <package>` to install package
 
 ## Testing Approach
 
