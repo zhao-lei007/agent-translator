@@ -71,7 +71,9 @@ src/
 - Ensure the terminal UI is responsive and user-friendly
 - Implement proper TypeScript types throughout the codebase
 - Use `npm i <package>` to install package
+- Always run `npm run dev` to test if it works
 - Always bump version after you finish
+- Alwasy commit you changes after you finish
 
 ## Testing Approach
 
