@@ -1,0 +1,43 @@
+{
+  "name": "translator-agent",
+  "version": "0.1.0",
+  "description": "An AI-powered intelligent translation CLI tool",
+  "type": "module",
+  "main": "dist/cli.js",
+  "bin": {
+    "translator-agent": "./dist/cli.js"
+  },
+  "scripts": {
+    "dev": "tsx src/cli.tsx",
+    "build": "tsc",
+    "start": "node dist/cli.js"
+  },
+  "keywords": [
+    "translator",
+    "cli",
+    "ai",
+    "translation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "ink": "^4.4.1",
+    "ink-text-input": "^5.0.1",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.3.3",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "tsx": {
+    "tsconfig": "./tsconfig.json",
+    "compilerOptions": {
+      "module": "ESNext"
+    }
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
