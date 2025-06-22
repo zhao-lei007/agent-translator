@@ -55,6 +55,17 @@ This project uses:
 - React + Ink for terminal UI
 - ESM modules for modern JavaScript
 
+## Technical Analysis
+
+For in-depth technical analysis and development insights, see:
+
+- [📋 Project Features Analysis](./docs/analysis/project-features.md) - Core features and technical highlights
+- [🔧 LLM Tool Calling Mechanism](./docs/analysis/llm-tool-calling.md) - Complete Function Calling flow analysis
+- [🤖 DeepSeek v3 Support](./docs/analysis/deepseek-v3-support.md) - DeepSeek v3 Function Calling compatibility
+- [🏗️ Architecture Principles](./docs/analysis/architecture-principles.md) - File organization and design principles
+- [👨‍💻 Non-Programmer Experience](./docs/analysis/non-programmer-experience.md) - AI-driven development best practices
+- [💬 Chat Summary](./docs/analysis/chat-summary.md) - Technical discussion summary
+
 ## License
 
 MIT
